@@ -21,7 +21,7 @@ body{background:var(--card);color:var(--ink);font-family:var(--font);font-size:1
  flex:none;color:var(--navy);text-decoration:none}
 .back svg{width:16px;height:16px}
 .top__t{flex:1;min-width:0}
-.top__eb{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.top__dir{font-size:11.5px;color:var(--muted);line-height:1.25;margin-top:1px}
 .top__nm{font-size:19px;font-weight:700;letter-spacing:-.022em;color:var(--navy);
  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .upd{flex:none;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.02em}
@@ -46,29 +46,30 @@ body{background:var(--card);color:var(--ink);font-family:var(--font);font-size:1
 .disr p{font-size:11px;line-height:1.32;margin-top:1px;color:#6E4E15}
 
 .list{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px}
-.hd{position:sticky;top:0;z-index:2;background:var(--card);padding:11px 2px 5px;
+.hd{position:sticky;top:0;z-index:2;background:var(--card);padding:12px 2px 6px;
  font-size:10.5px;font-weight:700;letter-spacing:.085em;text-transform:uppercase;color:var(--muted)}
 ul.arr{list-style:none;padding:0}
-ul.arr li{border-bottom:1px solid var(--line);padding-bottom:2px}
-.rowlink{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:11px;
- padding:10px 2px 4px;text-decoration:none;color:inherit}
+ul.arr li{border-bottom:1px solid #EDF0F6}
+ul.arr li:last-child{border-bottom:0}
+.rowlink{display:grid;grid-template-columns:auto 1fr auto auto;
+ grid-template-areas:"badge dest val chev" "next next next next";
+ align-items:center;column-gap:11px;row-gap:3px;padding:11px 2px 12px;text-decoration:none;color:inherit}
 .rowlink:active{background:#F1F4FA;border-radius:9px}
-.chev{width:8px;height:13px;flex:none;color:#C3CBD9;margin-left:1px}
+.chev{grid-area:chev;width:8px;height:13px;flex:none;color:#C9D1DE;margin-left:1px}
 body.nochev .chev{display:none}
 body.nochev .rowlink{grid-template-columns:auto 1fr auto}
-.badge{flex:none;min-width:34px;height:24px;border-radius:7px;color:#fff;padding:0 6px;font-family:var(--font);
+.badge{grid-area:badge;flex:none;min-width:34px;height:24px;border-radius:7px;color:#fff;padding:0 6px;font-family:var(--font);
  font-size:12.5px;font-weight:700;line-height:24px;text-align:center}
 .l1{background:var(--orange)}.l2{background:var(--blue)}.l3{background:var(--purple)}
 .l4{background:#0F7B6C}.l5{background:#B8437E}.l6{background:#3D6BB3}
 .mid{min-width:0}
-.dest{font-size:16px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.note{display:block;font-size:11px;font-weight:600;line-height:1.3;margin-top:2px;color:var(--muted)}
+.dest{grid-area:dest;font-size:16.5px;font-weight:600;letter-spacing:-.015em;color:var(--navy);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note{font-size:11.5px;font-weight:600;line-height:1.3;color:var(--muted);margin-left:9px}
 .note.a{color:var(--amber)}.note.b{color:var(--blue)}
-.nexts{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:0 2px 10px 45px;margin-top:-2px}
-.nextlbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);
- margin-right:2px}
-.nextt{font-size:12.5px;font-weight:600;color:#4A5C78;background:#EFF2F7;border-radius:6px;padding:3px 7px;
- font-variant-numeric:tabular-nums}
+.nexts{grid-area:next;display:flex;align-items:center;flex-wrap:wrap;gap:4px 0;padding-left:45px}
+.nextt{font-size:12.5px;font-weight:500;color:var(--dim);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.nextt+.nextt::before{content:"·";margin:0 7px;color:#C9D1DE}
 ul.arr li.off .nextt{color:var(--dim)}
 .sub{display:block;font-size:11px;font-weight:600;line-height:1.3;margin-top:2px;color:var(--muted)}
 .sub.b{color:var(--blue)}.sub.a{color:var(--amber)}.sub.g{color:var(--green)}
@@ -76,7 +77,8 @@ ul.arr li.off .nextt{color:var(--dim)}
 .right{text-align:right;min-width:58px}
 .rlab{display:block;font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
  color:var(--dim);line-height:1.1}
-.rval{display:block;font-size:18px;font-weight:700;color:var(--dim);font-variant-numeric:tabular-nums;line-height:1.15}
+.rval{grid-area:val;display:flex;align-items:baseline;justify-content:flex-end;font-size:18px;font-weight:700;
+ color:var(--muted);font-variant-numeric:tabular-nums;line-height:1.15;white-space:nowrap}
 .rval small{font-size:11.5px;font-weight:600;color:var(--dim);margin-left:1px}
 .rval.live{color:var(--blue)}.rval.live small{color:var(--muted)}
 li.off .dest{color:var(--dim)}
@@ -87,7 +89,7 @@ li.off .rval{text-decoration:line-through;text-decoration-thickness:1.6px}
  font-family:var(--font);text-align:center;box-shadow:0 5px 16px rgba(0,99,240,.26)}
 .cta b{display:block;font-size:17.5px;font-weight:700;letter-spacing:-.015em;line-height:1.18}
 .cta i{display:block;font-style:normal;font-size:16px;font-weight:700;margin-top:1px;font-variant-numeric:tabular-nums}
-@media (max-height:640px){.legend{display:none}ul.arr li{padding:8px 2px}}
+@media (max-height:640px){.rowlink{padding:9px 2px 10px}.hd{padding:9px 2px 5px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (min-width:520px){body{max-width:430px;margin:0 auto;box-shadow:0 0 60px rgba(10,35,66,.14)}}
 </style>
@@ -100,14 +102,10 @@ li.off .rval{text-decoration:line-through;text-decoration-thickness:1.6px}
       <svg viewBox="0 0 16 16" fill="none"><path d="M10 2 4 8l6 6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
     <div class="top__t">
-      <div class="top__eb" data-i18n="all.back"></div>
       <div class="top__nm">Mala pošta</div>
+      <div class="top__dir">smjer Kolodvor</div>
     </div>
     <span class="upd" id="updPill"><span id="updTxt"></span></span>
-  </div>
-  <div class="segs" role="tablist">
-    <button class="seg" role="tab" aria-selected="true">smjer Kolodvor</button>
-    <button class="seg" role="tab" aria-selected="false">smjer Diklo</button>
   </div>
 </div>
 
@@ -150,30 +148,29 @@ function applyI18n(){document.documentElement.lang=CUR;
 
 function row(r){
   const li=document.createElement('li');
-  let lab='',val='',cls='',note='';
+  let val='', cls='', note='';
   if(r.st==='live'){
-    lab=t('arr.inLabel',CUR); val=WAVE+r.min+' <small>min</small>'; cls='live';
+    val=WAVE+r.min+' <small>min</small>'; cls='live';
     if(r.delay&&r.delay>2) note='<span class="note a">'+t('arr.delay',CUR).replace('{n}',r.delay)+'</span>';
   } else if(r.st==='ret'){
-    lab=t('arr.atLabel',CUR); val=WAVE+r.at; cls='live';
+    val=r.at; cls='';
     note='<span class="note b">'+t('arr.returning',CUR).replace('{n}',r.veh)+'</span>';
   } else if(r.st==='off'){
-    lab=t('arr.atLabel',CUR); val=r.at; li.className='off';
-    note='<span class="note a">'+t('arr.cancelled',CUR)+' · '+r.why+'</span>';
+    val=r.at; li.className='off';
+    note='<span class="note a">'+t('arr.cancelled',CUR)+'</span>';
   } else {
-    lab=t('arr.atLabel',CUR); val=r.at;
+    val=r.at;
   }
   li.innerHTML=
     '<a class="rowlink" href="./linija.html?state='+
        (r.st==='live'?'live':r.st==='ret'?'notstarted':'none')+'">'+
       '<span class="badge '+r.cls+'">'+r.ln+'</span>'+
-      '<span class="mid"><span class="dest">'+r.dest+'</span>'+note+'</span>'+
-      '<span class="right"><span class="rlab">'+lab+'</span>'+
-        '<span class="rval '+cls+'">'+val+'</span></span>'+
+      '<span class="dest">'+r.dest+'</span>'+
+      '<span class="rval '+cls+'">'+val+'</span>'+
       CHEV+
-    '</a>'+
-    '<div class="nexts"><span class="nextlbl">'+t('arr.next',CUR)+'</span>'+
-      r.next.map(x=>'<span class="nextt">'+x+'</span>').join('')+'</div>';
+      '<span class="nexts">'+r.next.map(x=>'<span class="nextt">'+x+'</span>').join('')+
+        (note?note:'')+'</span>'+
+    '</a>';
   return li;
 }
 function render(){
