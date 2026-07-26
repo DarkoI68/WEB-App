@@ -349,9 +349,9 @@ function etaSeconds(i){
 function etaHTML(i){
   const sec=etaSeconds(i);
   if(sec<=20)  return '<span class="stime now">'+t('eta.now',CUR)+'</span>';
-  if(sec<=60)  return '<span class="stime soon">'+WAVE+t('eta.lessMin',CUR)+'</span>';
+  if(sec<=60)  return '<span class="stime soon">'+t('eta.lessMin',CUR)+'</span>';
   const min=Math.round(sec/60);
-  return '<span class="stime eta">'+WAVE+min+' <small>min</small></span>';
+  return '<span class="stime eta">'+min+' <small>min</small></span>';
 }
 function stopRow(i,liveRun){
   const nm=STOPS[i][0];
