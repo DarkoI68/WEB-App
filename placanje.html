@@ -156,7 +156,8 @@ const o=orderGet(no);
 if(!o) location.replace('./kupi.html');
 else { document.getElementById('amt').textContent=eur(o.total);
        document.getElementById('ono').textContent=o.no; }
-function pay(){
+function pay(method){
+  o.method=method;
   document.getElementById('busy').classList.add('on');
   setTimeout(()=>{
     o.status='paid'; o.ticket=mkTicketNo(); o.paid=Date.now(); orderSave(o);
@@ -164,7 +165,7 @@ function pay(){
     location.href='./uspjeh.html?no='+encodeURIComponent(o.no);
   },1800);
 }
-document.querySelectorAll('.pm').forEach(b=>b.onclick=pay);
+document.querySelectorAll('.pm').forEach(b=>b.onclick=()=>pay(b.dataset.m));
 document.getElementById('simFail').onclick=()=>{
   document.getElementById('busy').classList.add('on');
   setTimeout(()=>{ document.getElementById('busy').classList.remove('on');
@@ -173,12 +174,14 @@ document.getElementById('simFail').onclick=()=>{
 };
 document.getElementById('simAbort').onclick=()=>{
   /* placanje prolazi na serveru, ali se korisnik ne vraca na kartu */
-  o.status='paid'; o.ticket=mkTicketNo(); o.paid=Date.now(); orderSave(o);
+  o.method='card'; o.status='paid'; o.ticket=mkTicketNo(); o.paid=Date.now(); orderSave(o);
   bindKey(o.no);
   location.href='./prekid.html';
 };
 applyI18n();
 
 </script>
+
+<script>console.log("Liburnija · build 2026-07-27.2 · "+location.pathname.split("/").pop());</script>
 </body>
 </html>
