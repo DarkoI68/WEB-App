@@ -1,0 +1,48 @@
+{
+  "name": "Liburnija Zadar — karte i dolasci",
+  "short_name": "Liburnija",
+  "description": "Kupnja karata i dolasci autobusa u realnom vremenu, Zadar.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F9F9FB",
+  "theme_color": "#0063F0",
+  "lang": "hr",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Skeniraj stanicu",
+      "url": "./skener.html"
+    },
+    {
+      "name": "Moje karte",
+      "url": "./karte.html"
+    }
+  ]
+}
