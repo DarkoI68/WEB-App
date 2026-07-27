@@ -48,35 +48,32 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
  border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
 .badge-off .d{width:7px;height:7px;border-radius:50%;background:#A9B4C9}
 .clocknote{font-size:13px;color:var(--muted);margin-top:11px;line-height:1.4}
-.facts{display:grid;grid-template-columns:1fr 1fr;margin-top:10px;padding:0 4px}
-.fact{display:flex;align-items:center;justify-content:center;gap:9px;padding:4px 6px}
+.facts{display:grid;grid-template-columns:1fr 1fr;margin-top:16px;padding:0 8px}
+.fact{text-align:center;padding:2px 8px}
 .fact+.fact{border-left:1px solid var(--line)}
-.fact__i{flex:none;width:26px;height:26px;color:var(--blue)}
-.fact__i svg{width:100%;height:100%;display:block}
-.fact__t{min-width:0;text-align:left}
-.fact__l{display:block;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
- color:var(--blue);line-height:1.2}
-.fact__v{display:block;font-size:18px;font-weight:800;color:var(--navy);margin-top:1px;letter-spacing:-.02em;
+.fact__l{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+ color:var(--muted);line-height:1.2}
+.fact__v{display:block;font-size:21px;font-weight:700;color:var(--navy);margin-top:5px;letter-spacing:-.02em;
  line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* prekidac Karta / Voznja — samo kad je karta aktivna */
-.segs{display:none;gap:0;margin:10px 16px 2px;background:#F1F4F9;border-radius:13px;padding:3px}
+.segs{display:none;gap:0;margin:16px 16px 2px;background:#F1F4F9;border-radius:13px;padding:3px}
 .segs.on{display:flex}
 .segs button{flex:1;border:0;background:none;border-radius:10px;padding:10px 6px;font-family:var(--font);
  font-size:15px;font-weight:600;color:#5B6B85;transition:background .18s,color .18s}
 .segs button[aria-selected="true"]{background:var(--blue);color:#fff;font-weight:700;
  box-shadow:0 3px 10px rgba(0,99,240,.3)}
-/* panel voznje */
+
+/* ---- panel Vožnja ---- */
 .ride{display:none;padding:14px 16px 4px}
 .ride.on{display:block}
-.ridehd{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.lbadge{flex:none;min-width:36px;height:28px;border-radius:8px;background:var(--blue);color:#fff;
- font-size:14px;font-weight:700;line-height:28px;text-align:center;padding:0 7px}
-.ridehd__t{min-width:0}
-.ridehd__l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.ridehd__d{font-size:17px;font-weight:700;color:var(--navy);letter-spacing:-.02em;
+.ridehd{display:flex;align-items:center;gap:10px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+.lbadge{flex:none;min-width:34px;height:27px;border-radius:8px;background:var(--blue);color:#fff;
+ font-size:14px;font-weight:700;line-height:27px;text-align:center;padding:0 7px}
+.ridehd__d{flex:1;min-width:0;font-size:18px;font-weight:700;color:var(--navy);letter-spacing:-.022em;
  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ridehd__p{flex:none;background:var(--green-bg);color:var(--green);border-radius:999px;padding:5px 10px;
- font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+.ridehd__p{flex:none;display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);color:var(--green);
+ border-radius:999px;padding:5px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.ridehd__p .d{width:6px;height:6px;border-radius:50%;background:#16A34A;animation:pl 2s ease-in-out infinite}
 .rlist{list-style:none;padding:6px 0 0;margin:0;position:relative}
 .rlist li{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:11px;min-height:40px;position:relative}
 .rrail{position:relative;height:100%;display:grid;place-items:center}
@@ -168,9 +165,8 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
   .ring{width:min(182px,50vw)}
   .ring__v{font-size:clamp(36px,11vw,46px)}
   .ring__u{font-size:14px}
-  .facts{margin-top:7px}
-  .fact__i{width:23px;height:23px}
-  .fact__v{font-size:16.5px}
+  .facts{margin-top:11px}
+  .fact__v{font-size:19px;margin-top:4px}
   .segs{margin:7px 16px 2px}
   .segs button{padding:9px 6px;font-size:14px}
   .perf{height:16px}
@@ -222,7 +218,7 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
   </div>
   <a class="btn2 savebtn" id="save" href="#" data-i18n="tkt.save"></a>
   <p class="savenote" data-i18n="tkt.saveNote"></p>
-  <p class="buildtag">build 2026-07-27.3</p>
+  <p class="buildtag">build 2026-07-27.5</p>
   <button class="demoBtn" id="simVal" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-7 5 14L17 12h4"/></svg><span data-i18n="tkt.simulate"></span></button>
 </div>
 <div class="toast" id="toast" data-i18n="tkt.saved"></div>
@@ -317,12 +313,10 @@ else{
       box.innerHTML='<div class="badge-off"><span class="d"></span>'+t('tkt.inactive',CUR)+'</div>'+
         '<p class="clocknote">'+t('tkt.clockNote',CUR)+'</p>';
       facts.innerHTML=
-        '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="5"/><path d="M6.5 27a9.5 9.5 0 0 1 19 0"/></svg></span>'+
-          '<span class="fact__t"><span class="fact__l">'+t('tkt.pax',CUR)+'</span>'+
-          '<span class="fact__v">'+o.pax+'</span></span></div>'+
-        '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="24" height="17" rx="3.5"/><path d="M4 14h24"/></svg></span>'+
-          '<span class="fact__t"><span class="fact__l">'+t('tkt.price',CUR)+'</span>'+
-          '<span class="fact__v">'+eur(o.total)+'</span></span></div>';
+        '<div class="fact"><span class="fact__l">'+t('tkt.pax',CUR)+'</span>'+
+        '<span class="fact__v">'+o.pax+'</span></div>'+
+        '<div class="fact"><span class="fact__l">'+t('tkt.price',CUR)+'</span>'+
+        '<span class="fact__v">'+eur(o.total)+'</span></div>';
       document.getElementById('segs').classList.remove('on');
       return;
     }
@@ -360,12 +354,10 @@ else{
       (over?'<div class="badge-on badge-exp"><span class="d"></span>'+t('tkt.expired',CUR)+'</div>'+
             '<p class="expnote">'+t('tkt.expiredNote',CUR)+'</p>':'');
     facts.innerHTML=
-      '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="5"/><path d="M6.5 27a9.5 9.5 0 0 1 19 0"/></svg></span>'+
-        '<span class="fact__t"><span class="fact__l">'+t('tkt.pax',CUR)+'</span>'+
-        '<span class="fact__v">'+o.pax+'</span></span></div>'+
-      '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 26c0-2.2 1.8-4 4-4h8c2.2 0 4-1.8 4-4s-1.8-4-4-4h-8" stroke-dasharray="3 3"/><circle cx="8" cy="26" r="3"/><path d="M24 4c2.8 0 5 2.2 5 5 0 3.6-5 8-5 8s-5-4.4-5-8c0-2.8 2.2-5 5-5Z" fill="currentColor" stroke="none"/><circle cx="24" cy="9" r="1.9" fill="#fff" stroke="none"/></svg></span>'+
-        '<span class="fact__t"><span class="fact__l">'+t('tkt.line',CUR)+' '+RIDE.line+'</span>'+
-        '<span class="fact__v">'+RIDE.dest.toUpperCase()+'</span></span></div>';
+      '<div class="fact"><span class="fact__l">'+t('tkt.pax',CUR)+'</span>'+
+        '<span class="fact__v">'+o.pax+'</span></div>'+
+      '<div class="fact"><span class="fact__l">'+t('tkt.line',CUR)+' '+RIDE.line+'</span>'+
+        '<span class="fact__v">'+RIDE.dest+'</span></div>';
     document.getElementById('segs').classList.toggle('on', !over);
     if(over) showTab('t');
     const sim=document.getElementById('simVal'); if(sim) sim.style.display=over?'none':'';
@@ -378,9 +370,8 @@ else{
     const yourIn=Math.max(0,Math.round((RIDE.yourStop-pos)*RIDE.secPerStop/60));
     let html='<div class="ridehd">'+
       '<span class="lbadge">'+RIDE.line+'</span>'+
-      '<span class="ridehd__t"><span class="ridehd__l">'+t('tkt.tabRide',CUR)+'</span>'+
-        '<span class="ridehd__d">'+RIDE.dest+'</span></span>'+
-      '<span class="ridehd__p">'+t('tkt.onBoard',CUR)+'</span></div>'+
+      '<span class="ridehd__d">'+RIDE.dest+'</span>'+
+      '<span class="ridehd__p"><span class="d"></span>'+t('tkt.onBoard',CUR)+'</span></div>'+
       '<ul class="rlist" id="rlist">';
     RIDE.stops.forEach((nm,idx)=>{
       const done=idx<=i;
@@ -495,6 +486,6 @@ else{
 
 </script>
 
-<script>console.log("Liburnija · build 2026-07-27.3 · "+location.pathname.split("/").pop());</script>
+<script>console.log("Liburnija · build 2026-07-27.5 · "+location.pathname.split("/").pop());</script>
 </body>
 </html>
