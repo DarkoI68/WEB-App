@@ -39,9 +39,9 @@ body{background:#fff;color:var(--ink);font-family:var(--font);font-size:16px;lin
 .step__rail{position:relative;display:flex;justify-content:center}
 .step__rail::before{content:"";position:absolute;top:0;bottom:0;width:7px;border-radius:4px;background:transparent}
 .step.ride .step__rail::before{background:var(--railc,#0063F0);top:23px}
-.step.walkleg .step__rail::before{width:0;border-left:0;
+.step.walkleg .step__rail::before{width:7px;border-left:0;background:none;
  background-image:radial-gradient(circle,#C6D0E0 2.2px,transparent 2.3px);
- background-size:7px 11px;background-position:center;background-repeat:repeat-y}
+ background-size:7px 11px;background-position:center top;background-repeat:repeat-y}
 .node{position:relative;z-index:2;margin-top:13px}
 .node.pin{width:19px;height:19px;color:#C2410C;margin-top:11px}
 .node.dot{width:15px;height:15px;border-radius:50%;background:#fff;border:4px solid var(--railc,#0063F0)}
@@ -70,8 +70,15 @@ body{background:#fff;color:var(--ink);font-family:var(--font);font-size:16px;lin
 .mid{list-style:none;margin:0 0 6px;padding:0}
 .mid li{display:grid;grid-template-columns:1fr auto;align-items:center;padding:6px 0;font-size:14.5px;color:#3C4E69}
 .mid li span:last-child{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.transfer{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);color:#5C3B00;
- border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:700;margin-top:2px}
+.xfer{display:grid;grid-template-columns:34px 1fr auto;column-gap:12px;padding:0 16px}
+.xfer__rail{position:relative;display:flex;justify-content:center}
+.xfer__rail::before{content:"";position:absolute;top:0;bottom:0;width:7px;
+ background-image:radial-gradient(circle,#C6D0E0 2.2px,transparent 2.3px);
+ background-size:7px 11px;background-position:center top;background-repeat:repeat-y}
+.xfer__b{padding:9px 0 14px}
+.xfer__t{display:inline-flex;align-items:center;gap:7px;background:var(--amber-bg);color:#5C3B00;
+ border:1px solid var(--amber-line);border-radius:9px;padding:7px 11px;font-size:13px;font-weight:600}
+.xfer__t svg{width:15px;height:15px;flex:none}
 .foot{flex:none;padding:11px 16px calc(env(safe-area-inset-bottom) + 12px);border-top:1px solid var(--line);
  background:rgba(255,255,255,.97);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .cost{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px;font-size:13.5px;color:var(--muted)}
@@ -175,36 +182,69 @@ function render(){
     +'<span class="time">'+hhmm(Date.now())+'</span></div>';
   /* 2. hodanje do stanice */
   h+=walkLeg(A, r.sA, r.wA, r.sA.d, 'plan.walkTo');
-  /* 3. voznja */
-  h+='<div class="step ride" style="--railc:'+railc+'"><span class="step__rail"><span class="node dot"></span></span>'
-    +'<span class="step__b"><span class="ttl">'+r.sA.name+'</span>'
-    +'<span class="linebox"><span class="leg-bus '+(LCLS[r.lines[0]]||'l2')+'">'+r.lines[0]+'</span>'
-      +'<span class="linebox__d">'+r.sB.name+'</span>'
-      +'<span class="dep'+(r.waitMin<=3?' soon':'')+'">'+dep+'</span></span>'
-    +'<span class="alsoin">'+t('plan.alsoIn',CUR).replace('{a}','<b>'+(r.waitMin+12)+' min</b>').replace('{b}','<b>'+(r.waitMin+24)+' min</b>')+'</span>'
-    +'<button class="toggle'+(OPEN?' open':'')+'" id="tg">'
-      +t('plan.rideStops',CUR).replace('{n}',mids.length+1).replace('{m}',r.rideMin)+CHEV+'</button>'
-    +(OPEN?'<ul class="mid">'+mids.map((m,i)=>'<li><span>'+m+'</span><span>'+hhmm(new Date(r.dep).getTime() + (i+1)*2*60000)+'</span></li>').join('')+'</ul>':'')
-    +(r.transferAt?'<span class="transfer">'+t('plan.transferAt',CUR)+': '+r.transferAt+'</span>':'')
-    +'</span><span class="time"><b>'+hhmm(r.dep)+'</b></span></div>';
+  /* 3. voznja (jedna ili dvije, ovisno o presjedanju) */
+  const two = r.lines.length>1 && r.transferAt;
+  const xi = two ? Math.max(1, mids.indexOf(r.transferAt)+1) : mids.length;
+  const seg1 = two ? mids.slice(0, xi-1) : mids;
+  const seg2 = two ? mids.slice(xi) : [];
+  const xferName = two ? (mids[xi-1] || r.transferAt) : null;
+  const t0 = new Date(r.dep).getTime();
+  const per = 2*60000;
+
+  function rideBlock(line, fromName, toName, stops, startMs, showAlso){
+    const cls = LCLS[line]||'l2';
+    const col = {l1:'#DA5D23',l2:'#0063F0',l3:'#6352C4',l4:'#0F7B6C',l5:'#B8437E',l6:'#3D6BB3'}[cls];
+    const mins = (stops.length+1)*2;
+    const dep = r.waitMin<=1? t('plan.now2',CUR) : t('plan.depIn',CUR).replace('{n}',r.waitMin);
+    return '<div class="step ride" style="--railc:'+col+'"><span class="step__rail"><span class="node dot"></span></span>'
+      +'<span class="step__b"><span class="ttl">'+fromName+'</span>'
+      +'<span class="linebox"><span class="leg-bus '+cls+'">'+line+'</span>'
+        +'<span class="linebox__d">'+toName+'</span>'
+        +(showAlso?'<span class="dep'+(r.waitMin<=3?' soon':'')+'">'+dep+'</span>':'')+'</span>'
+      +(showAlso?'<span class="alsoin">'+t('plan.alsoIn',CUR).replace('{a}','<b>'+(r.waitMin+12)+' min</b>').replace('{b}','<b>'+(r.waitMin+24)+' min</b>')+'</span>':'')
+      +'<button class="toggle'+(OPEN?' open':'')+'" data-tg="1">'
+        +t('plan.rideStops',CUR).replace('{n}',stops.length+1).replace('{m}',mins)+CHEV+'</button>'
+      +(OPEN?'<ul class="mid">'+stops.map((m,i)=>'<li><span>'+m+'</span><span>'+hhmm(startMs+(i+1)*per)+'</span></li>').join('')+'</ul>':'')
+      +'</span><span class="time"><b>'+hhmm(startMs)+'</b></span></div>';
+  }
+  let endMs;
+  if(!two){
+    endMs = t0 + (seg1.length+1)*per;
+    h+=rideBlock(r.lines[0], r.sA.name, r.sB.name, seg1, t0, true);
+  } else {
+    const xferMs = t0 + (seg1.length+1)*per;
+    h+=rideBlock(r.lines[0], r.sA.name, xferName, seg1, t0, true);
+    /* izlazak i presjedanje */
+    h+='<div class="step" style="--railc:#C6D0E0"><span class="step__rail"><span class="node dot" style="border-color:#9AA6BC"></span></span>'
+      +'<span class="step__b"><span class="ttl">'+xferName+'</span>'
+      +'<span class="addr">'+t('plan.getOff',CUR)+'</span></span>'
+      +'<span class="time"><b>'+hhmm(xferMs)+'</b></span></div>';
+    h+='<div class="xfer"><span class="xfer__rail"></span>'
+      +'<span class="xfer__b"><span class="xfer__t">'
+        +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>'
+        +t('plan.transferAt',CUR)+' · '+xferName+'</span></span><span></span></div>';
+    const start2 = xferMs+3*60000;
+    endMs = start2 + (seg2.length+1)*per;
+    h+=rideBlock(r.lines[1], xferName, r.sB.name, seg2, start2, false);
+  }
   /* 4. izlazak */
   h+='<div class="step" style="--railc:'+railc+'"><span class="step__rail"><span class="node dot"></span></span>'
     +'<span class="step__b"><span class="ttl">'+r.sB.name+'</span><span class="addr">'+t('plan.getOff',CUR)+'</span></span>'
-    +'<span class="time"><b>'+hhmm(new Date(r.dep).getTime()+r.rideMin*60000)+'</b></span></div>';
+    +'<span class="time"><b>'+hhmm(endMs)+'</b></span></div>';
   /* 5. hodanje do cilja */
   h+=walkLeg(r.sB, B, r.wB, r.sB.d, 'plan.walkFrom');
   /* 6. odrediste */
   h+='<div class="step"><span class="step__rail"><svg class="node pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.6A2.6 2.6 0 1 1 12 6.4a2.6 2.6 0 0 1 0 5.2Z"/></svg></span>'
     +'<span class="step__b"><span class="ttl">'+B.name+'</span><span class="addr">'+t('plan.end',CUR)+'</span></span>'
-    +'<span class="time"><b>'+hhmm(r.arr)+'</b></span></div>';
+    +'<span class="time"><b>'+hhmm(endMs+r.wB*60000)+'</b></span></div>';
   q('wrap').innerHTML=h;
-  const tg=q('tg'); if(tg) tg.onclick=()=>{ OPEN=!OPEN; render(); };
+  document.querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>{ OPEN=!OPEN; render(); });
 }
 applyI18n(); render();
 }
 
 </script>
 <script src="./pwa.js"></script>
-<script>console.log("Liburnija · build 2026-07-27.19 · "+location.pathname.split("/").pop());</script>
+<script>console.log("Liburnija · build 2026-07-27.21 · "+location.pathname.split("/").pop());</script>
 </body>
 </html>
