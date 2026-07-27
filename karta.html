@@ -209,7 +209,7 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
 
 <div class="tkwrap">
   <div class="tkhead">
-    <a class="back" href="./karte.html" aria-label="Natrag"><svg viewBox="0 0 16 16" fill="none"><path d="M10 2 4 8l6 6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a class="back" href="./index.html" aria-label="Natrag"><svg viewBox="0 0 16 16" fill="none"><path d="M10 2 4 8l6 6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     <h1 data-i18n="tkt.title"></h1>
   </div>
   <div class="ticket">
@@ -243,7 +243,7 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
     </div>
   </div>
   
-  <p class="buildtag">build 2026-07-27.10</p>
+  <p class="buildtag">build 2026-07-27.11</p>
   <button class="demoBtn" id="simVal" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-7 5 14L17 12h4"/></svg><span data-i18n="tkt.simulate"></span></button>
 </div>
 <div class="flash" id="flash">
@@ -364,9 +364,13 @@ else{
     /* Kaskada: dok je vise od dana broji dane, ispod dana sate, ispod sata minute.
        Prijelaz je uvijek na cijeli broj vece jedinice.                        */
     const leftMin = over ? 0 : Math.ceil(ms/60000);
+    /* Najveca jedinica zavisi od vrste karte: jednokratna je uvijek u minutama,
+       dnevna ide sati->minute, trodnevna i tjedna dani->sati->minute.          */
+    const MAXU={single:'min', day:'h', three:'d', week:'d'};
+    const mu=MAXU[o.type||'single']||'min';
     let shown, unitKey;
-    if(leftMin >= 1440){ shown=Math.ceil(leftMin/1440); unitKey = shown===1?'tkt.day1':'tkt.dayN'; }
-    else if(leftMin >= 60){ shown=Math.ceil(leftMin/60); unitKey='tkt.hour'; }
+    if(mu==='d' && leftMin>=1440){ shown=Math.ceil(leftMin/1440); unitKey = shown===1?'tkt.day1':'tkt.dayN'; }
+    else if(mu!=='min' && leftMin>=60){ shown=Math.ceil(leftMin/60); unitKey='tkt.hour'; }
     else { shown=Math.max(0,leftMin); unitKey='tkt.min'; }
     const warn=!over && (ms<=10*60000 || frac<=0.1);
     const R=112, C=2*Math.PI*R;
@@ -523,6 +527,6 @@ else{
 
 </script>
 
-<script>console.log("Liburnija · build 2026-07-27.10 · "+location.pathname.split("/").pop());</script>
+<script>console.log("Liburnija · build 2026-07-27.11 · "+location.pathname.split("/").pop());</script>
 </body>
 </html>
