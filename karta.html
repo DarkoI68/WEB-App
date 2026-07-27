@@ -43,21 +43,27 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
 .tkhead h1{flex:1;font-size:18px;font-weight:700;color:#fff;letter-spacing:-.02em}
 .ticket{background:#fff;border-radius:18px;box-shadow:0 8px 30px rgba(10,35,66,.18);overflow:hidden}
 .tk__top{padding:18px 18px 16px;text-align:center}
-.tk__nm{font-size:21px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+.tk__nm{font-size:25px;font-weight:800;color:var(--navy);letter-spacing:-.025em}
 .badge-off{display:inline-flex;align-items:center;gap:6px;margin-top:9px;background:#F0F3F8;color:var(--muted);
  border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
 .badge-off .d{width:7px;height:7px;border-radius:50%;background:#A9B4C9}
 .clocknote{font-size:13px;color:var(--muted);margin-top:11px;line-height:1.4}
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:16px}
-.fact{background:#fff;padding:13px 10px;text-align:center}
-.fact__l{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
-.fact__v{font-size:17px;font-weight:700;color:var(--navy);margin-top:3px;font-variant-numeric:tabular-nums}
+.facts{display:grid;grid-template-columns:1fr 1fr;margin-top:18px;padding:0 6px}
+.fact{display:flex;align-items:center;gap:11px;padding:6px 10px}
+.fact+.fact{border-left:1px solid var(--line)}
+.fact__i{flex:none;width:30px;height:30px;color:var(--blue)}
+.fact__i svg{width:100%;height:100%}
+.fact__t{min-width:0}
+.fact__l{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+.fact__v{font-size:19px;font-weight:800;color:var(--navy);margin-top:1px;letter-spacing:-.02em;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* prekidac Karta / Voznja — samo kad je karta aktivna */
-.segs{display:none;gap:3px;margin:14px 14px 0;background:#EEF1F7;border-radius:12px;padding:3px}
+.segs{display:none;gap:0;margin:18px 16px 4px;background:#F1F4F9;border-radius:13px;padding:4px}
 .segs.on{display:flex}
-.segs button{flex:1;border:0;background:none;border-radius:9px;padding:10px 6px;font-family:var(--font);
- font-size:14.5px;font-weight:600;color:var(--muted)}
-.segs button[aria-selected="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,41,116,.14)}
+.segs button{flex:1;border:0;background:none;border-radius:10px;padding:12px 6px;font-family:var(--font);
+ font-size:16px;font-weight:600;color:#5B6B85;transition:background .18s,color .18s}
+.segs button[aria-selected="true"]{background:var(--blue);color:#fff;font-weight:700;
+ box-shadow:0 3px 10px rgba(0,99,240,.3)}
 /* panel voznje */
 .ride{display:none;padding:14px 16px 4px}
 .ride.on{display:block}
@@ -90,34 +96,39 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
  transition:top .4s linear;pointer-events:none}
 .rbus svg{width:14px;height:14px;color:#fff}
 .ridenote{font-size:11.5px;color:var(--muted);text-align:center;padding:12px 0 4px}
-.perf{position:relative;height:22px;background:#fff}
+.perf{position:relative;height:26px;background:#fff;margin-top:6px}
 .perf::before,.perf::after{content:"";position:absolute;top:50%;transform:translateY(-50%);
  width:22px;height:22px;border-radius:50%;background:var(--card)}
 .perf::before{left:-11px}.perf::after{right:-11px}
-.perf i{position:absolute;left:14px;right:14px;top:50%;height:1px;
- background:repeating-linear-gradient(90deg,#D7DDE8 0 5px,transparent 5px 11px)}
+.perf i{position:absolute;left:20px;right:20px;top:50%;height:7px;transform:translateY(-50%);
+ background-image:radial-gradient(circle,#C9D3E2 3.2px,transparent 3.3px);
+ background-size:22px 7px;background-position:center;background-repeat:repeat-x}
 .tk__qr{padding:4px 18px 18px;text-align:center;background:#fff}
-.qrno{font-size:12px;color:var(--muted)}
-.qrno b{color:var(--navy);font-family:ui-monospace,Menlo,monospace;letter-spacing:.04em;margin-left:5px}
-#qr{margin:12px auto 0;width:min(232px,62vw);aspect-ratio:1/1;display:grid;place-items:center}
+.qrno{font-size:12.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.qrno b{color:var(--blue);font-family:ui-monospace,Menlo,monospace;letter-spacing:.04em;margin-left:6px;
+ text-transform:none;font-size:14px}
+#qr{margin:12px auto 0;width:min(244px,66vw);aspect-ratio:1/1;display:grid;place-items:center;
+ border:1px solid var(--line);border-radius:14px;padding:11px;background:#fff}
 #qr img,#qr canvas,#qr table{width:100%;height:100%;image-rendering:pixelated}
 .qrhint{font-size:12.5px;color:var(--muted);margin-top:11px;line-height:1.4}
 .rot{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:11px;font-weight:600;color:var(--dim)}
 .rot .d{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pl 1.6s ease-in-out infinite}
 @keyframes pl{0%,100%{opacity:1}50%{opacity:.3}}
-/* prsten odbrojavanja */
-.ring{position:relative;width:168px;height:168px;margin:14px auto 0}
-.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:11;stroke-linecap:round}
-.ring .bg{stroke:#E9EDF4}
-.ring .fg{stroke:var(--blue);transition:stroke-dashoffset .9s linear,stroke .4s}
-.ring.warn .fg{stroke:var(--amber)}
-.ring.over .fg{stroke:#C2410C}
+/* prsten odbrojavanja — brojčanik s crticama */
+.ring{position:relative;width:min(268px,72vw);aspect-ratio:1/1;margin:6px auto 0}
+.ring svg{width:100%;height:100%;display:block}
+.ring .track{fill:none;stroke:#E9EDF4;stroke-width:9}
+.ring .prog{fill:none;stroke:url(#rgrad);stroke-width:9;stroke-linecap:round;
+ transition:stroke-dashoffset .9s linear}
+.ring.warn .prog{stroke:url(#wgrad)}
+.ring.over .prog{stroke:#C2410C}
+.ring .tick{stroke:#BFD3EA;stroke-width:1.6;stroke-linecap:round}
+.ring .tick.on{stroke:#7FB0E0}
 .ring__in{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
-.ring__l{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.ring__v{font-size:44px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1;margin-top:3px;
- font-variant-numeric:tabular-nums}
-.ring__u{font-size:13px;font-weight:600;color:var(--muted);margin-top:2px}
+.ring__l{font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A6180}
+.ring__v{font-size:clamp(52px,15vw,68px);font-weight:800;color:var(--navy);letter-spacing:-.04em;
+ line-height:.95;margin-top:4px;font-variant-numeric:tabular-nums}
+.ring__u{font-size:19px;font-weight:700;color:var(--navy);margin-top:1px;letter-spacing:-.01em}
 .badge-on{display:inline-flex;align-items:center;gap:6px;margin-top:9px;background:var(--green-bg);color:var(--green);
  border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
 .badge-on .d{width:7px;height:7px;border-radius:50%;background:#16A34A;animation:pl 2s ease-in-out infinite}
@@ -188,8 +199,8 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
   </div>
   <a class="btn2 savebtn" id="save" href="#" data-i18n="tkt.save"></a>
   <p class="savenote" data-i18n="tkt.saveNote"></p>
+  <p class="buildtag">build 2026-07-27.2</p>
   <button class="demoBtn" id="simVal" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-7 5 14L17 12h4"/></svg><span data-i18n="tkt.simulate"></span></button>
-  <p class="buildtag">build 2026-07-27.1</p>
 </div>
 <div class="toast" id="toast" data-i18n="tkt.saved"></div>
 <div class="flash" id="flash">
@@ -283,8 +294,12 @@ else{
       box.innerHTML='<div class="badge-off"><span class="d"></span>'+t('tkt.inactive',CUR)+'</div>'+
         '<p class="clocknote">'+t('tkt.clockNote',CUR)+'</p>';
       facts.innerHTML=
-        '<div class="fact"><div class="fact__l">'+t('tkt.pax',CUR)+'</div><div class="fact__v">'+o.pax+'</div></div>'+
-        '<div class="fact"><div class="fact__l">'+t('tkt.price',CUR)+'</div><div class="fact__v">'+eur(o.total)+'</div></div>';
+        '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="5"/><path d="M6.5 27a9.5 9.5 0 0 1 19 0"/></svg></span>'+
+          '<span class="fact__t"><span class="fact__l">'+t('tkt.pax',CUR)+'</span>'+
+          '<span class="fact__v">'+o.pax+'</span></span></div>'+
+        '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="24" height="17" rx="3.5"/><path d="M4 14h24"/></svg></span>'+
+          '<span class="fact__t"><span class="fact__l">'+t('tkt.price',CUR)+'</span>'+
+          '<span class="fact__v">'+eur(o.total)+'</span></span></div>';
       document.getElementById('segs').classList.remove('on');
       return;
     }
@@ -292,23 +307,42 @@ else{
     const totalMs=mins*60000, frac=Math.max(0,Math.min(1,ms/totalMs));
     const shown=over?0:(ms<60000?1:Math.ceil(ms/60000));
     const warn=!over && ms<=10*60000;
-    const C=2*Math.PI*74;
+    const R=112, C=2*Math.PI*R;
+    let ticks='';
+    for(let i=0;i<60;i++){
+      const ang=(i*6-90)*Math.PI/180, r1=R-16, r2=R-(i%5===0?26:22);
+      const x1=128+r1*Math.cos(ang), y1=128+r1*Math.sin(ang);
+      const x2=128+r2*Math.cos(ang), y2=128+r2*Math.sin(ang);
+      const lit = !over && (i/60) < frac;
+      ticks+='<line class="tick'+(lit?' on':'')+'" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+
+             '" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/>';
+    }
     box.innerHTML=
       '<div class="ring'+(over?' over':(warn?' warn':''))+'">'+
-        '<svg viewBox="0 0 168 168"><circle class="bg" cx="84" cy="84" r="74"/>'+
-        '<circle class="fg" cx="84" cy="84" r="74" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-frac))+'"/></svg>'+
+        '<svg viewBox="0 0 256 256">'+
+          '<defs>'+
+            '<linearGradient id="rgrad" x1="0" y1="1" x2="1" y2="0">'+
+              '<stop offset="0%" stop-color="#5FC8F5"/><stop offset="100%" stop-color="#0063F0"/></linearGradient>'+
+            '<linearGradient id="wgrad" x1="0" y1="1" x2="1" y2="0">'+
+              '<stop offset="0%" stop-color="#F5C15F"/><stop offset="100%" stop-color="#B26B00"/></linearGradient>'+
+          '</defs>'+
+          '<g transform="rotate(-90 128 128)">'+
+            '<circle class="track" cx="128" cy="128" r="'+R+'"/>'+
+            '<circle class="prog" cx="128" cy="128" r="'+R+'" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-frac))+'"/>'+
+          '</g>'+ticks+
+        '</svg>'+
         '<div class="ring__in"><div class="ring__l">'+t(over?'tkt.expired':'tkt.remaining',CUR)+'</div>'+
           (over?'':'<div class="ring__v">'+shown+'</div><div class="ring__u">'+t('tkt.min',CUR)+'</div>')+
         '</div></div>'+
-      '<div class="badge-on'+(over?' badge-exp':'')+'"><span class="d"></span>'+
-        t(over?'tkt.expired':'tkt.active',CUR)+'</div>'+
-      (over?'<p class="expnote">'+t('tkt.expiredNote',CUR)+'</p>':'');
+      (over?'<div class="badge-on badge-exp"><span class="d"></span>'+t('tkt.expired',CUR)+'</div>'+
+            '<p class="expnote">'+t('tkt.expiredNote',CUR)+'</p>':'');
     facts.innerHTML=
-      '<div class="fact"><div class="fact__l">'+t('tkt.pax',CUR)+'</div><div class="fact__v">'+o.pax+'</div></div>'+
-      '<div class="fact"><div class="fact__l">'+t('tkt.line',CUR)+' '+RIDE.line+'</div>'+
-        '<div class="fact__v">'+RIDE.dest.toUpperCase()+'</div></div>'+
-      '<div class="fact"><div class="fact__l">'+t('tkt.activatedAt',CUR)+'</div><div class="fact__v">'+hhmm(o.activated)+'</div></div>'+
-      '<div class="fact"><div class="fact__l">'+t('tkt.validUntil',CUR)+'</div><div class="fact__v">'+hhmm(o.activated+mins*60000)+'</div></div>';
+      '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="5"/><path d="M6.5 27a9.5 9.5 0 0 1 19 0"/></svg></span>'+
+        '<span class="fact__t"><span class="fact__l">'+t('tkt.pax',CUR)+'</span>'+
+        '<span class="fact__v">'+o.pax+'</span></span></div>'+
+      '<div class="fact"><span class="fact__i"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 26c0-2.2 1.8-4 4-4h8c2.2 0 4-1.8 4-4s-1.8-4-4-4h-8" stroke-dasharray="3 3"/><circle cx="8" cy="26" r="3"/><path d="M24 4c2.8 0 5 2.2 5 5 0 3.6-5 8-5 8s-5-4.4-5-8c0-2.8 2.2-5 5-5Z" fill="currentColor" stroke="none"/><circle cx="24" cy="9" r="1.9" fill="#fff" stroke="none"/></svg></span>'+
+        '<span class="fact__t"><span class="fact__l">'+t('tkt.line',CUR)+' '+RIDE.line+'</span>'+
+        '<span class="fact__v">'+RIDE.dest.toUpperCase()+'</span></span></div>';
     document.getElementById('segs').classList.toggle('on', !over);
     if(over) showTab('t');
     const sim=document.getElementById('simVal'); if(sim) sim.style.display=over?'none':'';
@@ -437,6 +471,7 @@ else{
 }
 
 </script>
-<script>console.log("Liburnija · build 2026-07-27.1 · karta");</script>
+
+<script>console.log("Liburnija · build 2026-07-27.2 · "+location.pathname.split("/").pop());</script>
 </body>
 </html>
