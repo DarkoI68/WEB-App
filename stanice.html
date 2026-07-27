@@ -42,8 +42,8 @@ body{background:var(--card);color:var(--ink);font-family:var(--font);font-size:1
 ul.stops{list-style:none;padding:0}
 ul.stops li{border-bottom:1px solid #EDF0F6}
 ul.stops li:last-child{border-bottom:0}
-.srow{display:grid;grid-template-columns:1fr auto auto;align-items:center;column-gap:10px;row-gap:4px;
- grid-template-areas:"nm star chev" "lines star chev";
+.srow{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:10px;row-gap:4px;
+ grid-template-areas:"nm chev" "lines chev";
  padding:11px 2px;text-decoration:none;color:inherit}
 .srow:active{background:#F1F4FA;border-radius:10px}
 .snm{grid-area:nm;font-size:16.5px;font-weight:600;letter-spacing:-.015em;color:var(--navy)}
@@ -52,7 +52,10 @@ ul.stops li:last-child{border-bottom:0}
  font-size:10.5px;font-weight:700;line-height:19px;text-align:center}
 .l1{background:var(--orange)}.l2{background:var(--blue)}.l3{background:var(--purple)}
 .l4{background:#0F7B6C}.l5{background:#B8437E}.l6{background:#3D6BB3}
-.star{grid-area:star;border:0;background:none;padding:6px;color:#C9D1DE;display:grid;place-items:center}
+.favmark{display:inline-grid;place-items:center;width:14px;height:14px;color:#E8A317;margin-left:6px;
+ vertical-align:-1px}
+.favmark svg{width:14px;height:14px}
+.star{border:0;background:none;padding:7px;color:#C9D1DE;display:grid;place-items:center;flex:none}
 .star svg{width:19px;height:19px}
 .star.on{color:#E8A317}
 .chev{grid-area:chev;width:11px;height:8px;color:#9AA6BC;flex:none;transition:transform .2s}
@@ -63,11 +66,22 @@ ul.stops li.open .snm{color:var(--blue)}
 .dirs{padding:0 2px 10px}
 .dirs__h{font-size:10px;font-weight:700;letter-spacing:.085em;text-transform:uppercase;color:var(--dim);
  padding:2px 0 7px}
-.drow{display:grid;grid-template-columns:1fr auto auto;grid-template-areas:"code lines chev" "to lines chev";
- align-items:center;column-gap:10px;row-gap:2px;background:#fff;border:1px solid var(--line);
- border-radius:11px;padding:10px 11px;margin-bottom:7px;text-decoration:none;color:inherit}
+.drow{display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--line);
+ border-radius:11px;padding:4px 6px 4px 11px;margin-bottom:7px}
 .drow:last-child{margin-bottom:0}
-.drow:active{background:#EFF3FA}
+.drow__go{flex:1;min-width:0;display:grid;grid-template-columns:1fr auto auto;
+ grid-template-areas:"code lines chev" "to lines chev";
+ align-items:center;column-gap:10px;row-gap:2px;padding:7px 0;text-decoration:none;color:inherit}
+.drow__go:active{opacity:.6}
+.frow{flex:1;min-width:0;display:grid;grid-template-columns:1fr auto auto;
+ grid-template-areas:"nm lines chev" "to lines chev";
+ align-items:center;column-gap:10px;row-gap:2px;padding:9px 0 9px 2px;text-decoration:none;color:inherit}
+ul.stops li:has(.frow){display:flex;align-items:center;gap:4px}
+.fnm{grid-area:nm;font-size:15.5px;font-weight:700;color:var(--navy);letter-spacing:-.015em;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fto{grid-area:to;font-size:12px;color:var(--muted);line-height:1.3}
+.flines{grid-area:lines;display:flex;flex-wrap:wrap;gap:3px;max-width:96px;justify-content:flex-end}
+.frow .chev{grid-area:chev;width:8px;height:13px}
 .dcode{grid-area:code;font-size:14.5px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
 .dtowards{grid-area:to;font-size:12.5px;color:var(--muted);line-height:1.35}
 .dlines{grid-area:lines;display:flex;flex-wrap:wrap;gap:3px;max-width:96px;justify-content:flex-end}
@@ -167,69 +181,93 @@ const STAR_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 const TILE_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const TILE_ATTR='© OpenStreetMap contributors';
 
+/* Favorit je STUP (stanica + smjer), ne stanica. Kljuc: "Ime|A" */
 function favGet(){ try{ return JSON.parse(localStorage.getItem('favStops')||'[]'); }catch(e){ return []; } }
 function favSet(a){ try{ localStorage.setItem('favStops', JSON.stringify(a)); }catch(e){} }
-function isFav(n){ return favGet().indexOf(n)>=0; }
-function toggleFav(n){ const f=favGet(); const i=f.indexOf(n);
-  if(i>=0) f.splice(i,1); else f.push(n); favSet(f); renderList(); }
-
+function favKey(name,code){ return name+'|'+code; }
+function isFav(name,code){ return favGet().indexOf(favKey(name,code))>=0; }
+function stopHasFav(name){ return favGet().some(k=>k.split('|')[0]===name); }
+function toggleFav(name,code){
+  const f=favGet(), k=favKey(name,code), i=f.indexOf(k);
+  if(i>=0) f.splice(i,1); else f.push(k);
+  favSet(f); renderList();
+}
 function norm(s){ return s.toLowerCase()
   .replace(/[čć]/g,'c').replace(/š/g,'s').replace(/ž/g,'z').replace(/đ/g,'d'); }
-
 function lineChips(lines){
   return lines.map(l=>'<span class="lb '+(LCLS[l]||'l2')+'">'+l+'</span>').join('');
 }
-let OPENSTOP=null;
-/* Hrvatski trazi dativ iza "prema"; ostali jezici koriste nominativ. */
 function destText(dests){
   const cap=2;
   const nm=d=>(CUR==='hr' && DAT[d]) ? DAT[d] : d;
   if(dests.length<=cap) return dests.map(nm).join(', ');
   return dests.slice(0,cap).map(nm).join(', ') + (CUR==='hr'
-    ? ' i još '+(dests.length-cap)
-    : ' +'+(dests.length-cap));
+    ? ' i još '+(dests.length-cap) : ' +'+(dests.length-cap));
 }
-function dirRows(name){
-  const f=document.createDocumentFragment();
-  (DIRS[name]||[]).forEach(d=>{
-    const [code,lines,dests]=d;
-    const a=document.createElement('a');
-    a.className='drow';
-    a.href='./index.html?stop='+encodeURIComponent(name)+'&dir='+code;
-    a.innerHTML='<span class="dcode">'+t(code==='A'?'dir.a':'dir.b',CUR)+'</span>'+
+function dirOf(name,code){ return (DIRS[name]||[]).find(d=>d[0]===code); }
+
+let OPENSTOP=null;
+
+/* redak smjera unutar rastvorene stanice: nosi zvjezdicu */
+function dirRow(name,d){
+  const [code,lines,dests]=d;
+  const fav=isFav(name,code);
+  const wrap=document.createElement('div'); wrap.className='drow';
+  wrap.innerHTML=
+    '<a class="drow__go" href="./index.html?stop='+encodeURIComponent(name)+'&dir='+code+'">'+
+      '<span class="dcode">'+t(code==='A'?'dir.a':'dir.b',CUR)+'</span>'+
       '<span class="dtowards">'+t('dir.towards',CUR).replace('{d}',destText(dests))+'</span>'+
-      '<span class="dlines">'+lineChips(lines)+'</span>'+CHEV;
-    f.appendChild(a);
-  });
-  return f;
+      '<span class="dlines">'+lineChips(lines)+'</span>'+CHEV+
+    '</a>'+
+    '<button class="star'+(fav?' on':'')+'" type="button" aria-label="'+
+      t(fav?'stops.remFav':'stops.addFav',CUR)+'">'+(fav?STAR_ON:STAR_OFF)+'</button>';
+  wrap.querySelector('.star').addEventListener('click',e=>{
+    e.preventDefault(); e.stopPropagation(); toggleFav(name,code); });
+  return wrap;
 }
+
+/* redak stanice u popisu: BEZ zvjezdice; puna zvjezdica samo kad je neki smjer favorit */
 function stopLi(s){
   const li=document.createElement('li');
-  const fav=isFav(s[0]);
   const open=(OPENSTOP===s[0]);
+  const marked=stopHasFav(s[0]);
   if(open) li.className='open';
   li.innerHTML='<div class="srow" role="button" tabindex="0">'+
-      '<span class="snm">'+s[0]+'</span>'+
+      '<span class="snm">'+s[0]+(marked?'<span class="favmark">'+STAR_ON+'</span>':'')+'</span>'+
       '<span class="slines">'+lineChips(s[3])+'</span>'+
-      '<button class="star'+(fav?' on':'')+'" type="button" aria-label="'+
-        t(fav?'stops.remFav':'stops.addFav',CUR)+'">'+(fav?STAR_ON:STAR_OFF)+'</button>'+
       '<svg class="chev'+(open?' up':'')+'" viewBox="0 0 12 8" fill="none"><path d="M1 1.5 6 6.5l5-5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
     '</div>';
-  li.querySelector('.star').addEventListener('click',e=>{
-    e.preventDefault(); e.stopPropagation(); toggleFav(s[0]); });
   li.querySelector('.srow').addEventListener('click',()=>{
     OPENSTOP = open ? null : s[0]; renderList();
-    if(!open) setTimeout(()=>{const el=[...document.querySelectorAll('li.open')][0];
+    if(!open) setTimeout(()=>{const el=document.querySelector('li.open');
       if(el) el.scrollIntoView({block:'nearest',behavior:'smooth'});},60); });
   if(open){
     const box=document.createElement('div'); box.className='dirs';
     const h=document.createElement('div'); h.className='dirs__h';
     h.textContent=t('dir.pick',CUR); box.appendChild(h);
-    box.appendChild(dirRows(s[0]));
+    (DIRS[s[0]]||[]).forEach(d=>box.appendChild(dirRow(s[0],d)));
     li.appendChild(box);
   }
   return li;
 }
+
+/* favorit u svojoj sekciji: vodi ravno na stup */
+function favLi(key){
+  const [name,code]=key.split('|');
+  const d=dirOf(name,code); if(!d) return null;
+  const li=document.createElement('li');
+  li.innerHTML=
+    '<a class="frow" href="./index.html?stop='+encodeURIComponent(name)+'&dir='+code+'">'+
+      '<span class="fnm">'+name+' · '+t(code==='A'?'dir.a':'dir.b',CUR)+'</span>'+
+      '<span class="fto">'+t('dir.towards',CUR).replace('{d}',destText(d[2]))+'</span>'+
+      '<span class="flines">'+lineChips(d[1])+'</span>'+CHEV+
+    '</a>'+
+    '<button class="star on" type="button" aria-label="'+t('stops.remFav',CUR)+'">'+STAR_ON+'</button>';
+  li.querySelector('.star').addEventListener('click',e=>{
+    e.preventDefault(); e.stopPropagation(); toggleFav(name,code); });
+  return li;
+}
+
 function section(title,items){
   if(!items.length) return null;
   const f=document.createDocumentFragment();
@@ -244,19 +282,29 @@ function renderList(){
   document.getElementById('clr').classList.toggle('on', q.length>0);
   const match=STOPS.filter(s=>!q || norm(s[0]).indexOf(q)>=0 ||
     s[3].some(l=>norm(l).indexOf(q)===0));
-  if(!match.length){
-    body.innerHTML='<div class="empty"><b>'+t('stops.none',CUR)+'</b></div>'; return;
-  }
-  const fav=match.filter(s=>isFav(s[0]));
-  const rest=match.filter(s=>!isFav(s[0])).sort((a,b)=>a[0].localeCompare(b[0],'hr'));
+
   if(!q){
-    const fs=section(t('stops.fav',CUR),fav);
-    if(fs) body.appendChild(fs);
-    else { const e=document.createElement('div'); e.className='empty';
-      e.innerHTML='<b>'+t('stops.fav',CUR)+'</b>'+t('stops.emptyFav',CUR); body.appendChild(e); }
+    const favs=favGet();
+    const h=document.createElement('div'); h.className='hd';
+    h.textContent=t('stops.fav',CUR); body.appendChild(h);
+    if(favs.length){
+      const ul=document.createElement('ul'); ul.className='stops';
+      favs.forEach(k=>{ const li=favLi(k); if(li) ul.appendChild(li); });
+      body.appendChild(ul);
+    } else {
+      const e=document.createElement('div'); e.className='empty';
+      e.textContent=t('stops.emptyFav',CUR); body.appendChild(e);
+    }
   }
-  const rs=section(q? t('stops.all',CUR) : t('stops.all',CUR), q? match.sort((a,b)=>a[0].localeCompare(b[0],'hr')) : rest);
-  if(rs) body.appendChild(rs);
+
+  if(!match.length){
+    body.innerHTML+='<div class="empty"><b>'+t('stops.none',CUR)+'</b></div>'; return;
+  }
+  const h2=document.createElement('div'); h2.className='hd';
+  h2.textContent=t('stops.all',CUR); body.appendChild(h2);
+  const ul2=document.createElement('ul'); ul2.className='stops';
+  match.slice().sort((a,b)=>a[0].localeCompare(b[0],'hr')).forEach(s=>ul2.appendChild(stopLi(s)));
+  body.appendChild(ul2);
 }
 document.getElementById('q').addEventListener('input',renderList);
 document.getElementById('clr').addEventListener('click',()=>{
