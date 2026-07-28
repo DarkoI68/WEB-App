@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF">
-<title>Kupi kartu · Liburnija d.o.o.</title>
+<title>Potvrda kupnje · Liburnija d.o.o.</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <style>
@@ -26,33 +26,118 @@ body{background:var(--card);color:var(--ink);font-family:var(--font);font-size:1
 .q{font-size:19px;font-weight:700;color:var(--navy);letter-spacing:-.02em;margin:0 2px 13px}
 @media (min-width:520px){body{max-width:430px;margin:0 auto;box-shadow:0 0 60px rgba(10,35,66,.14)}}
 
-.tlist{display:grid;gap:11px}
-.tcard{display:grid;grid-template-columns:1fr auto auto;align-items:center;column-gap:12px;row-gap:3px;
- grid-template-areas:"nm price chev" "sub price chev";
- background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:17px 16px;
- text-decoration:none;color:inherit;font-family:var(--font);text-align:left;width:100%}
-.tcard:active{background:#EFF4FC;border-color:var(--blue)}
-.tcard__n{grid-area:nm;font-size:19px;font-weight:700;color:var(--navy);letter-spacing:-.02em}
-.tcard__s{grid-area:sub;font-size:14px;color:var(--muted);line-height:1.35}
-.tcard__p{grid-area:price;font-size:22px;font-weight:800;color:var(--navy);white-space:nowrap;
- font-variant-numeric:tabular-nums}
-.tcard__c{grid-area:chev;width:9px;height:15px;color:#C3CBD9}
-.lock{display:inline-flex;align-items:center;gap:5px;margin-top:5px;background:var(--amber-bg);color:var(--amber);
- border-radius:7px;padding:4px 8px;font-size:11.5px;font-weight:700}
-.lock svg{width:12px;height:12px}
-.footnote{padding:18px 4px 22px;text-align:center;font-size:13px;color:var(--muted);line-height:1.5}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 16px}
+.card+.card{margin-top:12px}
+.tname{font-size:21px;font-weight:800;color:var(--navy);letter-spacing:-.022em}
+.tsub{font-size:14.5px;color:var(--muted);margin-top:3px}
+.paxq{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.paxn{font-size:13.5px;color:var(--muted);line-height:1.4}
+.stepper{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:16px}
+.stepper button{width:56px;height:56px;border:1.5px solid var(--line);background:#fff;border-radius:16px;
+ font-size:28px;font-weight:600;color:var(--navy);line-height:1;display:grid;place-items:center}
+.stepper button:active{background:#EFF4FC;border-color:var(--blue)}
+.stepper button:disabled{color:#CBD3E0;background:#F6F8FB;border-color:#EDF0F6}
+.stepper .n{min-width:56px;text-align:center;font-size:34px;font-weight:800;color:var(--navy);
+ font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.sum{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:15px;
+ border-top:1px solid var(--line)}
+.sum__l{font-size:14.5px;color:var(--muted)}
+.sum__r{font-size:28px;font-weight:800;color:var(--navy);letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.accept{display:flex;align-items:flex-start;gap:13px;background:#fff;border:1px solid var(--line);
+ border-radius:16px;padding:16px;margin-top:12px;cursor:pointer}
+.accept input{appearance:none;-webkit-appearance:none;width:28px;height:28px;border:2.5px solid #B9C3D4;
+ border-radius:8px;flex:none;background:#fff;position:relative;margin-top:1px}
+.accept input:checked{background:var(--blue);border-color:var(--blue)}
+.accept input:checked::after{content:"";position:absolute;left:8px;top:3px;width:8px;height:14px;
+ border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.accept span{font-size:16px;line-height:1.4}
+.foot{flex:none;position:sticky;bottom:0;background:rgba(249,249,251,.97);border-top:1px solid var(--line);
+ padding:12px 14px calc(env(safe-area-inset-bottom) + 12px);
+ -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.buy{display:block;width:100%;border:0;border-radius:16px;background:var(--blue);color:#fff;padding:18px 14px;
+ font-family:var(--font);font-size:19px;font-weight:800;letter-spacing:-.01em;text-align:center;
+ box-shadow:0 6px 18px rgba(0,99,240,.3)}
+.buy:active{background:var(--blue-dark);transform:translateY(1px)}
+.buy.off{background:#DDE3EC;color:#8B97AC;box-shadow:none}
+.links{padding:14px 6px 4px;text-align:center;font-size:12.5px;line-height:1.7;color:var(--dim)}
+.links a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.authbox{display:none;background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:16px;
+ padding:16px;margin-top:12px}
+.authbox.on{display:block}
+.authbox b{display:block;font-size:16px;color:#5C3B00}
+.authbox p{font-size:13.5px;color:#6E4E15;margin-top:5px;line-height:1.45}
+.authbtn{display:block;width:100%;border:1px solid #DADCE0;background:#fff;border-radius:13px;padding:14px;
+ margin-top:10px;font-family:var(--font);font-size:16px;font-weight:600;color:#3C4043}
+.authbtn.dark{background:#000;color:#fff;border-color:#000}
+.authok{font-size:14px;font-weight:700;color:var(--green);margin-top:10px}
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(10,35,66,.45);opacity:0;pointer-events:none;
+ transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.alert{position:fixed;left:18px;right:18px;top:50%;transform:translateY(-50%) scale(.96);z-index:41;
+ background:#fff;border-radius:20px;padding:24px 20px 18px;text-align:center;opacity:0;pointer-events:none;
+ transition:opacity .2s,transform .2s;box-shadow:0 20px 50px rgba(10,35,66,.3)}
+.alert.on{opacity:1;transform:translateY(-50%) scale(1);pointer-events:auto}
+.alert__i{width:56px;height:56px;border-radius:50%;background:var(--amber-bg);display:grid;place-items:center;
+ margin:0 auto}
+.alert__i svg{width:28px;height:28px;color:var(--amber)}
+.alert b{display:block;font-size:19px;font-weight:800;color:var(--navy);margin-top:14px;letter-spacing:-.02em}
+.alert p{font-size:15px;color:var(--muted);margin-top:7px;line-height:1.45}
+.alert button{width:100%;border:0;border-radius:14px;background:var(--blue);color:#fff;padding:15px;margin-top:18px;
+ font-family:var(--font);font-size:17px;font-weight:700}
+@media (min-width:520px){.alert{max-width:394px;left:50%;right:auto;transform:translate(-50%,-50%) scale(.96)}
+ .alert.on{transform:translate(-50%,-50%) scale(1)}}
 </style>
 </head>
 <body>
 
 <div class="top">
-  <a class="back" href="./index.html" aria-label="Natrag"><svg viewBox="0 0 16 16" fill="none"><path d="M10 2 4 8l6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-  <h1 data-i18n="cards.buy"></h1>
+  <a class="back" href="./kupi.html" aria-label="Natrag"><svg viewBox="0 0 16 16" fill="none"><path d="M10 2 4 8l6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <h1 data-i18n="buy.confirmTitle"></h1>
 </div>
 <div class="wrap">
-  <p class="q" data-i18n="buy.pickTitle"></p>
-  <div class="tlist" id="list"></div>
-  <p class="footnote" data-i18n="hint.transfer"></p>
+  <div class="card">
+    <div class="tname" id="tName"></div>
+    <div class="tsub" id="tSub"></div>
+  </div>
+
+  <div class="card">
+    <div class="paxq" data-i18n="buy.paxQ"></div>
+    <div class="paxn" data-i18n="buy.paxNote2"></div>
+    <div class="stepper">
+      <button id="minus" type="button" aria-label="−">−</button>
+      <span class="n" id="pax">1</span>
+      <button id="plus" type="button" aria-label="+">+</button>
+    </div>
+    <div class="sum">
+      <span class="sum__l" id="perPax"></span>
+      <span class="sum__r" id="total">1,50 €</span>
+    </div>
+  </div>
+
+  <div class="authbox" id="authbox">
+    <b data-i18n="auth.needed"></b>
+    <p data-i18n="auth.why"></p>
+    <button class="authbtn" id="gBtn" type="button" data-i18n="auth.google"></button>
+    <button class="authbtn dark" id="aBtn" type="button" data-i18n="auth.apple"></button>
+    <p class="authok" id="authok" style="display:none"></p>
+  </div>
+
+  <label class="accept"><input id="accept" type="checkbox"><span data-i18n="buy.accept"></span></label>
+
+  <p class="links">
+    <a href="./uvjeti.html" data-i18n="about.terms"></a> ·
+    <a href="./privatnost.html" data-i18n="about.privacy"></a> ·
+    <a href="./pravna-obavijest.html" data-i18n="about.legal"></a>
+  </p>
+</div>
+<div class="foot"><button class="buy off" id="buy" type="button"></button></div>
+
+<div class="scrim" id="scrim"></div>
+<div class="alert" id="alert" role="alertdialog" aria-modal="true">
+  <div class="alert__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6 21 19H3l9-15.4Z"/><path d="M12 9.6v4.2M12 16.6h.01"/></svg></div>
+  <b data-i18n="buy.mustAccept"></b>
+  <p data-i18n="buy.mustAcceptSub"></p>
+  <button id="alertOk" type="button" data-i18n="buy.ok"></button>
 </div>
 
 <script>
@@ -90,20 +175,52 @@ function mkOrderNo(){ const d=new Date();
   return 'ZD-'+String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+
     String(d.getDate()).padStart(2,'0')+'-'+Math.random().toString(36).slice(2,6).toUpperCase(); }
 
-const LOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.4"/><path d="M8.4 10.5V7.8a3.6 3.6 0 0 1 7.2 0v2.7"/></svg>';
-const CHEV='<svg class="tcard__c" viewBox="0 0 9 15" fill="none"><path d="M1.5 1.5 7 7.5l-5.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const list=document.getElementById('list');
-Object.keys(TYPES).forEach(k=>{
-  const T=TYPES[k];
-  const a=document.createElement('a');
-  a.className='tcard'; a.href='./potvrda.html?type='+k;
-  a.innerHTML='<span class="tcard__n">'+t(T.k,CUR)+'</span>'+
-    '<span class="tcard__s">'+t(T.s,CUR)+
-      (T.auth&&!account()?'<span class="lock">'+LOCK+t('auth.needed',CUR)+'</span>':'')+'</span>'+
-    '<span class="tcard__p">'+eur(T.price)+'</span>'+CHEV;
-  list.appendChild(a);
-});
-applyI18n();
+let TYPE=new URLSearchParams(location.search).get('type')||'single';
+if(!TYPES[TYPE]) TYPE='single';
+let pax=1;
+const q=id=>document.getElementById(id);
+function upd(){
+  const T=TYPES[TYPE];
+  q('tName').textContent=t(T.k,CUR);
+  q('tSub').textContent=t(T.s,CUR);
+  q('pax').textContent=pax;
+  q('minus').disabled=(pax<=1); q('plus').disabled=(pax>=6);
+  const total=pax*T.price;
+  q('perPax').textContent=eur(T.price)+' '+t('buy.perPerson',CUR)+' × '+pax;
+  q('total').textContent=eur(total);
+  q('buy').textContent=t('buy.pay',CUR).replace('{total}',eur(total));
+  const needAuth=T.auth && !account();
+  q('authbox').classList.toggle('on', T.auth);
+  const ok=q('authok');
+  if(T.auth && account()){ ok.style.display='block';
+    ok.textContent=t('auth.signedIn',CUR).replace('{e}',account());
+    q('gBtn').style.display='none'; q('aBtn').style.display='none'; }
+  else { ok.style.display='none'; q('gBtn').style.display=''; q('aBtn').style.display=''; }
+  q('buy').classList.toggle('off', needAuth || !q('accept').checked);
+}
+q('minus').onclick=()=>{ if(pax>1){pax--;upd();} };
+q('plus').onclick=()=>{ if(pax<6){pax++;upd();} };
+q('accept').onchange=upd;
+function signIn(p){ try{ localStorage.setItem('account', p==='g'?'demo@gmail.com':'demo@privaterelay.appleid.com'); }catch(e){}
+  upd(); }
+q('gBtn').onclick=()=>signIn('g'); q('aBtn').onclick=()=>signIn('a');
+
+function alertOn(){ q('scrim').classList.add('on'); q('alert').classList.add('on'); }
+function alertOff(){ q('scrim').classList.remove('on'); q('alert').classList.remove('on'); }
+q('alertOk').onclick=()=>{ alertOff(); q('accept').focus(); };
+q('scrim').onclick=alertOff;
+
+/* Gumb je uvijek pritisnjiv: ako uvjeti nisu prihvaceni, objasni umjesto da sutis. */
+q('buy').onclick=()=>{
+  const T=TYPES[TYPE];
+  if(T.auth && !account()){ q('authbox').scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if(!q('accept').checked){ alertOn(); return; }
+  const o={no:mkOrderNo(), type:TYPE, pax:pax, total:pax*T.price,
+           account:T.auth?account():null, status:'pending', created:Date.now()};
+  orderSave(o);
+  location.href='./narudzba.html?no='+encodeURIComponent(o.no);
+};
+applyI18n(); upd();
 
 </script>
 <script src="./pwa.js"></script>
