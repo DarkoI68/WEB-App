@@ -112,6 +112,10 @@ function applyI18n(){window.__pwaT=function(k){return t(k,CUR);};document.docume
    e.textContent=s;});}
 
 applyI18n();
+/* Kod otvoren obicnom kamerom vec nosi parametre — idi ravno na odabir karte. */
+(function(){ const p=new URLSearchParams(location.search);
+  if(p.get('bus')) location.replace('./ekspres.html'+location.search);
+  else if(p.get('stop')) location.replace('./index.html'+location.search); })();
 const v=document.getElementById('cam'), cv=document.getElementById('cv'), ctx=cv.getContext('2d',{willReadFrequently:true});
 const frame=document.getElementById('frame'), hint=document.getElementById('hint');
 let stream=null, raf=null, done=false;
