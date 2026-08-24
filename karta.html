@@ -10,8 +10,8 @@
 <title>Jednokratna karta · Liburnija d.o.o.</title>
 <script src="./qrcode.js?v=2026-08-24.2"></script>
 <style>
-html{touch-action:manipulation}
-button,a,input,select,label,summary,[role="button"]{touch-action:manipulation}
+html,body{touch-action:manipulation}
+body *{touch-action:manipulation}
 
 :root{--blue:#0063F0;--blue-dark:#004FC4;--navy:#002974;--ink:#0A2342;--green:#12693A;--green-bg:#E7F6EC;
  --amber:#B26B00;--amber-bg:#FFF6E3;--amber-line:#F2D9A8;
@@ -293,7 +293,7 @@ body{background:linear-gradient(180deg,#0A5BA8 0%,#1478C8 42%,#E8EEF4 42%,var(--
   <div class="smini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></svg><span data-i18n="save.note"></span></div>
   <button class="slater" id="sLater" type="button" data-i18n="save.later"></button>
 </div>
-<p class="buildtag">build 2026-08-24.10</p>
+<p class="buildtag">build 2026-08-24.11</p>
   <button class="demoBtn" id="simVal" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-7 5 14L17 12h4"/></svg><span data-i18n="tkt.simulate"></span></button>
 </div>
 <div class="flash" id="flash">
@@ -621,7 +621,7 @@ else{
 
 </script>
 
-<script>console.log("Liburnija · build 2026-08-24.10 · "+location.pathname.split("/").pop());</script>
+<script>console.log("Liburnija · build 2026-08-24.11 · "+location.pathname.split("/").pop());</script>
 <script src="./pwa.js?v=2026-08-24.2"></script>
 </body>
 </html>

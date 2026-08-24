@@ -10,8 +10,10 @@
 <title>Stanice · Liburnija d.o.o.</title>
 <link rel="stylesheet" href="./maplibre-gl.css">
 <style>
-html{touch-action:manipulation}
-button,a,input,select,label,summary,[role="button"]{touch-action:manipulation}
+html,body{touch-action:manipulation}
+body *{touch-action:manipulation}
+/* Zemljovid sam upravlja gestama — vracamo mu ih. */
+.maplibregl-map,.maplibregl-map *{touch-action:none}
 
 :root{--blue:#0063F0;--blue-dark:#004FC4;--navy:#002974;--ink:#0A2342;
  --orange:#DA5D23;--purple:#6352C4;--amber:#B26B00;
@@ -391,7 +393,7 @@ renderList();
 
 </script>
 
-<script>console.log("Liburnija · build 2026-08-24.10 · "+location.pathname.split("/").pop());</script>
+<script>console.log("Liburnija · build 2026-08-24.11 · "+location.pathname.split("/").pop());</script>
 <script src="./pwa.js?v=2026-08-24.2"></script>
 </body>
 </html>
