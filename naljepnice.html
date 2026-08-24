@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Generator naljepnica · Liburnija</title>
+<style>
+html,body{touch-action:manipulation}
+body *{touch-action:manipulation}
+
+:root{--blue:#0063F0;--navy:#0A2342;--card:#F9F9FB;--line:#E3E7F0;--muted:#6B7A99;--amber-bg:#FFF6E3;--amber-line:#F2D9A8;
+ --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+body{background:#EDEFF3;font-family:var(--font);color:var(--navy);padding:24px 16px 60px;font-size:15px;line-height:1.5}
+.page{max-width:980px;margin:0 auto}
+h1{font-size:24px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:6px 0 22px}
+.grid{display:grid;grid-template-columns:340px 1fr;gap:26px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+label{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:14px 0 5px}
+label:first-of-type{margin-top:0}
+input,select{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-family:var(--font);font-size:15px;color:var(--navy);background:var(--card)}
+input:focus,select:focus{outline:none;border-color:var(--blue);background:#fff}
+.hint{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:block;width:100%;border:0;border-radius:12px;background:var(--blue);color:#fff;padding:13px;
+ margin-top:18px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer}
+.btn2{background:#fff;color:var(--navy);border:1px solid var(--line);margin-top:8px}
+.url{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-top:14px;
+ font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#3C4E69;word-break:break-all}
+.note{background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:11px;padding:11px 12px;
+ font-size:12.5px;color:#5C3B00;margin-top:14px;line-height:1.45}
+canvas{width:100%;max-width:420px;display:block;margin:0 auto;border-radius:14px;box-shadow:0 6px 22px rgba(10,35,66,.16)}
+.tabs{display:flex;gap:6px;background:#EEF1F7;border-radius:11px;padding:3px;margin-bottom:16px}
+.tabs button{flex:1;border:0;background:none;border-radius:9px;padding:9px;font-family:var(--font);font-size:14px;
+ font-weight:600;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,41,116,.14)}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Generator naljepnica</h1>
+  <p class="sub">Upišite adresu na kojoj je aplikacija objavljena i podatke o vozilu. Naljepnica se preuzima kao PNG spreman za tisak.</p>
+  <div class="grid">
+    <div class="panel">
+      <label for="base">Adresa aplikacije</label>
+      <input id="base" type="url" value="https://darkoi68.github.io/liburnija/" placeholder="https://…">
+      <p class="hint">Adresa mape u kojoj je <b>ekspres.html</b>. Otvorite aplikaciju na mobitelu i prekopirajte adresu iz preglednika bez naziva datoteke.</p>
+
+      <div class="row">
+        <div><label for="veh">Garažni broj</label><input id="veh" value="1042"></div>
+        <div><label for="line">Linija</label><input id="line" value="2"></div>
+      </div>
+      <label for="dest">Odredište</label>
+      <input id="dest" value="Poluotok">
+
+      <label for="kind">Vrsta naljepnice</label>
+      <select id="kind">
+        <option value="door">Ulazna vrata — Kupi kartu</option>
+        <option value="driver">Kod vozača — Nemate kartu?</option>
+      </select>
+
+      <div class="url" id="urlOut"></div>
+      <button class="btn" id="dl" type="button">Preuzmi naljepnicu (PNG)</button>
+      <button class="btn btn2" id="dlqr" type="button">Preuzmi samo QR kod</button>
+      <button class="btn btn2" id="test" type="button">Otvori adresu za provjeru</button>
+
+      <div class="note" id="warn"></div>
+    </div>
+    <div class="panel"><canvas id="cv" width="900" height="1800"></canvas></div>
+  </div>
+</div>
+
+<script src="./qrcode.js?v=2026-08-24.2"></script>
+<script>
+
+const q=id=>document.getElementById(id);
+const NAVY='#0A2342', BLUE='#0063F0', MUTED='#6B7A99', LINE='#E3E7F0';
+const TXT={
+ door:{t1:'KUPI KARTU', t2:'BUY A TICKET',
+   steps:[['Uperite kameru u kod','Point your camera at the code'],
+          ['Odaberite kartu','Choose a ticket'],
+          ['Platite Apple ili Google Payem','Pay with Apple or Google Pay']],
+   badge:'Bez instalacije aplikacije',
+   f1:'Karta vrijedi 90 min na svim gradskim linijama', f2:'Valid 90 min on all city lines'},
+ driver:{t1:'NEMATE KARTU?', t2:'NO TICKET?',
+   steps:[['Uperite kameru u kod','Point your camera at the code'],
+          ['Kupite kartu u 30 sekundi','Buy a ticket in 30 seconds'],
+          ['Prislonite kod na validator','Hold the code to the validator']],
+   badge:null,
+   f1:'Vozač ne prodaje karte', f2:'The driver does not sell tickets'}
+};
+function baseUrl(){ let b=q('base').value.trim(); if(!b) return ''; if(!b.endsWith('/')) b+='/'; return b; }
+function targetUrl(){
+  const p=new URLSearchParams();
+  p.set('bus', q('line').value.trim()); p.set('veh', q('veh').value.trim());
+  if(q('dest').value.trim()) p.set('dest', q('dest').value.trim());
+  return baseUrl()+'ekspres.html?'+p.toString();
+}
+function qrCanvas(px){
+  const qr=qrcode(0,'Q'); qr.addData(targetUrl()); qr.make();
+  const n=qr.getModuleCount(), pad=2, cell=Math.floor(px/(n+pad*2));
+  const size=cell*(n+pad*2);
+  const c=document.createElement('canvas'); c.width=c.height=size;
+  const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,size,size);
+  x.fillStyle=NAVY;
+  for(let r=0;r<n;r++) for(let col=0;col<n;col++)
+    if(qr.isDark(r,col)) x.fillRect((col+pad)*cell,(r+pad)*cell,cell,cell);
+  return c;
+}
+function rr(x,ctx,a,b,w,h,r){ ctx.beginPath(); ctx.moveTo(a+r,b);
+  ctx.arcTo(a+w,b,a+w,b+h,r); ctx.arcTo(a+w,b+h,a,b+h,r);
+  ctx.arcTo(a,b+h,a,b,r); ctx.arcTo(a,b,a+w,b,r); ctx.closePath(); }
+function draw(){
+  const kind=q('kind').value, T=TXT[kind];
+  const W=900, cv=q('cv'), c=cv.getContext('2d');
+  const H=1780; cv.width=W; cv.height=H;
+  c.fillStyle='#fff'; c.fillRect(0,0,W,H);
+  c.fillStyle=NAVY; rr(0,c,0,0,W,250,44); c.fill();
+  c.textAlign='center'; c.fillStyle='#fff'; c.font='700 50px -apple-system,sans-serif';
+  c.fillText('LIBURNIJA ZADAR', W/2, 108);
+  let y=330;
+  c.fillStyle=NAVY; c.font='800 68px -apple-system,sans-serif'; c.fillText(T.t1, W/2, y); y+=64;
+  c.fillStyle=BLUE; c.font='800 46px -apple-system,sans-serif'; c.fillText(T.t2, W/2, y); y+=76;
+  c.textAlign='left';
+  T.steps.forEach((s,i)=>{
+    c.fillStyle=BLUE; c.beginPath(); c.arc(84, y+6, 27, 0, 7); c.fill();
+    c.fillStyle='#fff'; c.textAlign='center'; c.font='800 32px -apple-system,sans-serif';
+    c.fillText(String(i+1), 84, y+18); c.textAlign='left';
+    c.fillStyle=NAVY; c.font='700 38px -apple-system,sans-serif'; c.fillText(s[0], 132, y+16);
+    c.fillStyle=MUTED; c.font='400 32px -apple-system,sans-serif'; c.fillText(s[1], 132, y+58);
+    y+=110;
+  });
+  y+=18;
+  const qs=600, qc=qrCanvas(qs);
+  c.drawImage(qc, (W-qs)/2, y, qs, qs); y+=qs+34;
+  c.textAlign='center';
+  if(T.badge){
+    const bw=560, bh=86; c.fillStyle='#FFF6E3'; c.strokeStyle='#F2D9A8'; c.lineWidth=3;
+    rr(0,c,(W-bw)/2, y, bw, bh, bh/2); c.fill(); c.stroke();
+    c.fillStyle='#5C3B00'; c.font='700 34px -apple-system,sans-serif'; c.fillText(T.badge, W/2, y+56); y+=bh+34;
+  } else {
+    const bw=560, bh=86; c.fillStyle='#F2F7FF'; c.strokeStyle='#D8E6FB'; c.lineWidth=3;
+    rr(0,c,(W-bw)/2, y, bw, bh, bh/2); c.fill(); c.stroke();
+    c.fillStyle=BLUE; c.font='700 34px -apple-system,sans-serif';
+    c.fillText('Linija '+q('line').value+' · vozilo '+q('veh').value, W/2, y+56); y+=bh+34;
+  }
+  c.fillStyle=NAVY; c.font='700 36px -apple-system,sans-serif'; c.fillText(T.f1, W/2, y); y+=46;
+  c.fillStyle=MUTED; c.font='400 32px -apple-system,sans-serif'; c.fillText(T.f2, W/2, y);
+  c.strokeStyle=LINE; c.lineWidth=3; rr(0,c,1.5,1.5,W-3,H-3,44); c.stroke();
+  q('urlOut').textContent=targetUrl();
+  const b=baseUrl();
+  q('warn').innerHTML = /github\.io\/?$/.test(b.replace(/https?:\/\//,'').replace(/\/$/,''))
+    ? '<b>Provjerite adresu.</b> Aplikacija na GitHub Pagesu obično nije u korijenu domene nego u mapi repozitorija, npr. <code>…github.io/liburnija/</code>. Pritisnite „Otvori adresu za provjeru”.'
+    : 'Prije tiska pritisnite „Otvori adresu za provjeru” — mora se otvoriti ekran odabira karte, ne stranica s greškom.';
+}
+['base','veh','line','dest','kind'].forEach(id=>q(id).addEventListener('input',draw));
+q('kind').addEventListener('change',draw);
+q('dl').onclick=()=>{ const a=document.createElement('a');
+  a.download='naljepnica-'+q('kind').value+'-'+q('veh').value+'.png';
+  a.href=q('cv').toDataURL('image/png'); a.click(); };
+q('dlqr').onclick=()=>{ const c=qrCanvas(1200); const a=document.createElement('a');
+  a.download='qr-vozilo-'+q('veh').value+'.png'; a.href=c.toDataURL('image/png'); a.click(); };
+q('test').onclick=()=>window.open(targetUrl(),'_blank');
+draw();
+
+</script>
+</body>
+</html>
