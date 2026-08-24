@@ -2,7 +2,7 @@
   "name": "Liburnija Zadar — karte i dolasci",
   "short_name": "Liburnija",
   "description": "Kupnja karata i dolasci autobusa u realnom vremenu, Zadar.",
-  "start_url": "./index.html",
+  "start_url": "./index.html?v=2026-08-24.2",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -44,5 +44,6 @@
       "name": "Moje karte",
       "url": "./karte.html"
     }
-  ]
+  ],
+  "id": "/liburnija/"
 }
